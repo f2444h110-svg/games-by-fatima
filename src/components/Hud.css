@@ -1,0 +1,126 @@
+.hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px clamp(14px, 4vw, 32px);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hud-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--panel-bg);
+  border: 2px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 6px 14px;
+  backdrop-filter: blur(6px);
+  min-width: 76px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+  animation: hudBob 3s ease-in-out infinite;
+}
+
+.game-hud .hud-score {
+  margin-left: 40px;
+}
+
+.hud-level {
+  animation-delay: 0.15s;
+}
+
+.hud-round {
+  animation-delay: 0.3s;
+}
+
+.hud-players {
+  animation-delay: 0.6s;
+}
+
+@keyframes hudBob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.hud-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  opacity: 0.9;
+}
+
+.hud-value {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 2.4vw, 18px);
+  font-weight: 700;
+  color: var(--paper);
+}
+
+.hud-dots {
+  display: flex;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.hud-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: dotPop 1.4s ease-in-out infinite;
+  box-shadow: 0 0 6px currentColor;
+}
+
+@keyframes dotPop {
+  0%, 100% {
+    transform: scale(0.85);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@media (max-width: 640px) {
+  .hud {
+    padding: 10px 10px;
+  }
+  .hud-pill {
+    min-width: 0;
+    padding: 5px 9px;
+    border-radius: 10px;
+  }
+  .hud-label {
+    font-size: 9px;
+  }
+  .hud-value {
+    font-size: 12px;
+  }
+}
+
+.hud-timer-low {
+  border-color: var(--pink);
+  animation: timerLow 0.6s ease-in-out infinite, hudBob 3s ease-in-out infinite;
+}
+
+.hud-timer-low .hud-value {
+  color: var(--pink);
+}
+
+@keyframes timerLow {
+  0%, 100% {
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+  }
+  50% {
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 0 16px rgba(255, 62, 165, 0.8);
+  }
+}

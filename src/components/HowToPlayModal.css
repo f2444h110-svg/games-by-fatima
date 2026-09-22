@@ -1,0 +1,127 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 5, 20, 0.72);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+  animation: overlayFade 0.2s ease-out;
+}
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-panel {
+  position: relative;
+  width: min(480px, 100%);
+  max-height: 85svh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #2a1a4a 0%, #1a1030 100%);
+  border: 3px solid var(--panel-border);
+  border-radius: 22px;
+  padding: 28px 24px 24px;
+  box-shadow: 0 16px 0 rgba(0, 0, 0, 0.3), 0 24px 40px rgba(0, 0, 0, 0.5);
+  animation: panelPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes panelPop {
+  from {
+    transform: scale(0.85) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--paper);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.modal-close:hover {
+  transform: rotate(90deg);
+  background: rgba(255, 62, 165, 0.35);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 700;
+  margin: 0 0 18px;
+  text-align: center;
+  color: var(--yellow);
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.rule-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.rule-item:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.rule-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.rule-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.95rem;
+  color: var(--paper);
+}
+
+.rule-text strong {
+  font-family: var(--font-display);
+  color: var(--cyan);
+  font-size: 1.05rem;
+}
+
+.modal-got-it {
+  display: flex;
+  margin: 22px auto 0;
+  padding: 12px 30px;
+}

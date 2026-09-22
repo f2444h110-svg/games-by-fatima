@@ -1,0 +1,214 @@
+.arena {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, var(--purple) 0%, var(--purple-dark) 45%, var(--ink) 85%);
+  z-index: 0;
+}
+
+.arena-glow {
+  position: absolute;
+  inset: -10%;
+  background: radial-gradient(circle at 50% 20%, rgba(255, 210, 63, 0.35), transparent 55%),
+    radial-gradient(circle at 15% 70%, rgba(255, 62, 165, 0.3), transparent 50%),
+    radial-gradient(circle at 85% 65%, rgba(61, 232, 224, 0.28), transparent 50%);
+  animation: glowShift 10s ease-in-out infinite alternate;
+}
+
+@keyframes glowShift {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    transform: scale(1.15) rotate(8deg);
+  }
+}
+
+.arena-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at 50% 40%, black 0%, transparent 75%);
+  animation: gridDrift 18s linear infinite;
+}
+
+@keyframes gridDrift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 96px 48px, 48px 96px;
+  }
+}
+
+.arena-ring {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  width: min(70vw, 620px);
+  height: min(70vw, 620px);
+  border-radius: 50%;
+  border: 3px dashed rgba(255, 248, 239, 0.18);
+  transform: translate(-50%, -50%);
+  animation: ringSpin 40s linear infinite;
+}
+
+@keyframes ringSpin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.arena-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22%;
+  background: linear-gradient(180deg, rgba(74, 23, 148, 0) 0%, rgba(26, 16, 48, 0.85) 70%, var(--ink) 100%);
+  border-top: 3px solid rgba(255, 248, 239, 0.15);
+}
+
+.spark {
+  position: absolute;
+  bottom: -10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--yellow);
+  opacity: 0.7;
+  animation: floatUp linear infinite;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.spark-0 { left: 6%; background: var(--yellow); animation-duration: 9s; animation-delay: 0s; }
+.spark-1 { left: 18%; background: var(--pink); animation-duration: 11s; animation-delay: 1.2s; }
+.spark-2 { left: 33%; background: var(--cyan); animation-duration: 8s; animation-delay: 2.4s; }
+.spark-3 { left: 49%; background: var(--lime); animation-duration: 12s; animation-delay: 0.6s; }
+.spark-4 { left: 64%; background: var(--orange); animation-duration: 10s; animation-delay: 3s; }
+.spark-5 { left: 78%; background: var(--yellow); animation-duration: 9.5s; animation-delay: 1.8s; }
+
+.spark:nth-child(6n) { left: 90%; }
+.spark:nth-child(7n) { left: 3%; }
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.creature-drift {
+  position: absolute;
+  bottom: 14%;
+  animation-name: drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(-30px);
+  }
+  to {
+    transform: translateX(30px);
+  }
+}
+
+.creature-bounce {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation-name: bounceY;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounceY {
+  0% {
+    transform: translateY(-64px);
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+  }
+  100% {
+    transform: translateY(-64px);
+  }
+}
+
+.creature-shadow {
+  position: absolute;
+  bottom: -6px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.6), transparent 70%);
+  animation-name: shadowPulse;
+  animation-iteration-count: infinite;
+  z-index: -1;
+}
+
+@keyframes shadowPulse {
+  0% {
+    transform: scaleX(0.55);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 0.45;
+  }
+  100% {
+    transform: scaleX(0.55);
+    opacity: 0.2;
+  }
+}
+
+.creature-squash {
+  display: block;
+  animation-name: squash;
+  animation-iteration-count: infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes squash {
+  0% {
+    transform: scaleX(0.9) scaleY(1.1);
+  }
+  50% {
+    transform: scaleX(1.2) scaleY(0.8);
+  }
+  100% {
+    transform: scaleX(0.9) scaleY(1.1);
+  }
+}
+
+.pupil {
+  animation: lookAround 4s ease-in-out infinite;
+}
+
+@keyframes lookAround {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-3px, 1px);
+  }
+  50% {
+    transform: translate(2px, -2px);
+  }
+  75% {
+    transform: translate(3px, 2px);
+  }
+}

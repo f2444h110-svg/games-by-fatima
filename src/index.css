@@ -1,0 +1,64 @@
+:root {
+  --purple: #7b2ff7;
+  --purple-dark: #4a1794;
+  --pink: #ff3ea5;
+  --orange: #ff8a3d;
+  --yellow: #ffd23f;
+  --cyan: #3de8e0;
+  --lime: #9dff3d;
+  --ink: #1a1030;
+  --ink-soft: #2a1a4a;
+  --paper: #fff8ef;
+  --panel-bg: rgba(26, 16, 48, 0.55);
+  --panel-border: rgba(255, 255, 255, 0.25);
+
+  --font-display: 'Baloo 2', system-ui, sans-serif;
+  --font-body: 'Fredoka', system-ui, sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--paper);
+  background: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+  width: 100%;
+}
+
+button {
+  font-family: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
