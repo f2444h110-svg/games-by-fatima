@@ -283,6 +283,35 @@
   pointer-events: none;
 }
 
+.touch-joystick {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--panel-bg);
+  border: 2px solid var(--panel-border);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.touch-joystick-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff6cf, var(--yellow) 60%, #c98f00 100%);
+  box-shadow: 0 0 10px rgba(255, 210, 63, 0.7);
+  transform: translate3d(0px, 0px, 0) translate(-50%, -50%);
+  transition: transform 0.05s linear;
+}
+
 @media (max-width: 640px) {
   .game-arena-wrap {
     padding-top: 64px;

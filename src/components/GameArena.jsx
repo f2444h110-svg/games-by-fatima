@@ -120,6 +120,8 @@ function GameArena({ level, initialScore = 0, onRoundEnd, onExit, onRestartLevel
   const charRefs = useRef([])
   const coinRefs = useRef([])
   const keysRef = useRef(new Set())
+  const touchIndicatorRef = useRef(null)
+  const touchKnobRef = useRef(null)
   const entitiesRef = useRef(createEntities(charDefsRef.current))
   const coinsRef = useRef(createCoins(BUMPERS, levelConfig.numCoins))
   const scaleRef = useRef(1)
@@ -245,15 +247,38 @@ function GameArena({ level, initialScore = 0, onRoundEnd, onExit, onRestartLevel
     if (!el) return undefined
 
     const DRAG_DEAD_ZONE = 10
+    const KNOB_MAX_RADIUS = 36
     let activePointerId = null
     let anchorX = 0
     let anchorY = 0
+    let anchorLocalX = 0
+    let anchorLocalY = 0
 
     const clearTouchDirections = () => {
       keysRef.current.delete('ArrowLeft')
       keysRef.current.delete('ArrowRight')
       keysRef.current.delete('ArrowUp')
       keysRef.current.delete('ArrowDown')
+    }
+
+    const showIndicator = () => {
+      const indicator = touchIndicatorRef.current
+      if (!indicator) return
+      indicator.style.transform = `translate3d(${anchorLocalX}px, ${anchorLocalY}px, 0) translate(-50%, -50%)`
+      indicator.style.opacity = '1'
+      if (touchKnobRef.current) touchKnobRef.current.style.transform = 'translate3d(0px, 0px, 0) translate(-50%, -50%)'
+    }
+
+    const moveKnob = (dx, dy) => {
+      const knob = touchKnobRef.current
+      if (!knob) return
+      const dist = Math.hypot(dx, dy)
+      const clampScale = dist > KNOB_MAX_RADIUS ? KNOB_MAX_RADIUS / dist : 1
+      knob.style.transform = `translate3d(${dx * clampScale}px, ${dy * clampScale}px, 0) translate(-50%, -50%)`
+    }
+
+    const hideIndicator = () => {
+      if (touchIndicatorRef.current) touchIndicatorRef.current.style.opacity = '0'
     }
 
     const updateTouchDirection = (dx, dy) => {
@@ -283,6 +308,7 @@ function GameArena({ level, initialScore = 0, onRoundEnd, onExit, onRestartLevel
       if (e.pointerId !== activePointerId) return
       activePointerId = null
       clearTouchDirections()
+      hideIndicator()
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerup', endDrag)
       window.removeEventListener('pointercancel', endDrag)
@@ -291,7 +317,10 @@ function GameArena({ level, initialScore = 0, onRoundEnd, onExit, onRestartLevel
     function handlePointerMove(e) {
       if (e.pointerId !== activePointerId) return
       e.preventDefault()
-      updateTouchDirection(e.clientX - anchorX, e.clientY - anchorY)
+      const dx = e.clientX - anchorX
+      const dy = e.clientY - anchorY
+      updateTouchDirection(dx, dy)
+      moveKnob(dx, dy)
     }
 
     const handlePointerDown = (e) => {
@@ -299,7 +328,11 @@ function GameArena({ level, initialScore = 0, onRoundEnd, onExit, onRestartLevel
       activePointerId = e.pointerId
       anchorX = e.clientX
       anchorY = e.clientY
+      const rect = el.getBoundingClientRect()
+      anchorLocalX = e.clientX - rect.left
+      anchorLocalY = e.clientY - rect.top
       e.preventDefault()
+      showIndicator()
       window.addEventListener('pointermove', handlePointerMove, { passive: false })
       window.addEventListener('pointerup', endDrag)
       window.addEventListener('pointercancel', endDrag)
@@ -539,6 +572,10 @@ function GameArena({ level, initialScore = 0, onRoundEnd, onExit, onRestartLevel
             isPlayer={def.isPlayer}
           />
         ))}
+
+        <div className="touch-joystick" ref={touchIndicatorRef} aria-hidden="true">
+          <div className="touch-joystick-knob" ref={touchKnobRef} />
+        </div>
       </div>
 
       {paused && <PauseMenu onResume={resume} onRestartLevel={onRestartLevel} onExit={onExit} />}
