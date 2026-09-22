@@ -241,6 +241,82 @@ function GameArena({ level, initialScore = 0, onRoundEnd, onExit, onRestartLevel
   }, [])
 
   useEffect(() => {
+    const el = containerRef.current
+    if (!el) return undefined
+
+    const DRAG_DEAD_ZONE = 10
+    let activePointerId = null
+    let anchorX = 0
+    let anchorY = 0
+
+    const clearTouchDirections = () => {
+      keysRef.current.delete('ArrowLeft')
+      keysRef.current.delete('ArrowRight')
+      keysRef.current.delete('ArrowUp')
+      keysRef.current.delete('ArrowDown')
+    }
+
+    const updateTouchDirection = (dx, dy) => {
+      if (dx < -DRAG_DEAD_ZONE) {
+        keysRef.current.add('ArrowLeft')
+        keysRef.current.delete('ArrowRight')
+      } else if (dx > DRAG_DEAD_ZONE) {
+        keysRef.current.add('ArrowRight')
+        keysRef.current.delete('ArrowLeft')
+      } else {
+        keysRef.current.delete('ArrowLeft')
+        keysRef.current.delete('ArrowRight')
+      }
+      if (dy < -DRAG_DEAD_ZONE) {
+        keysRef.current.add('ArrowUp')
+        keysRef.current.delete('ArrowDown')
+      } else if (dy > DRAG_DEAD_ZONE) {
+        keysRef.current.add('ArrowDown')
+        keysRef.current.delete('ArrowUp')
+      } else {
+        keysRef.current.delete('ArrowUp')
+        keysRef.current.delete('ArrowDown')
+      }
+    }
+
+    const endDrag = (e) => {
+      if (e.pointerId !== activePointerId) return
+      activePointerId = null
+      clearTouchDirections()
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', endDrag)
+      window.removeEventListener('pointercancel', endDrag)
+    }
+
+    function handlePointerMove(e) {
+      if (e.pointerId !== activePointerId) return
+      e.preventDefault()
+      updateTouchDirection(e.clientX - anchorX, e.clientY - anchorY)
+    }
+
+    const handlePointerDown = (e) => {
+      if (e.pointerType === 'mouse' || activePointerId !== null) return
+      activePointerId = e.pointerId
+      anchorX = e.clientX
+      anchorY = e.clientY
+      e.preventDefault()
+      window.addEventListener('pointermove', handlePointerMove, { passive: false })
+      window.addEventListener('pointerup', endDrag)
+      window.addEventListener('pointercancel', endDrag)
+    }
+
+    el.addEventListener('pointerdown', handlePointerDown, { passive: false })
+    return () => {
+      el.removeEventListener('pointerdown', handlePointerDown)
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', endDrag)
+      window.removeEventListener('pointercancel', endDrag)
+      clearTouchDirections()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     let raf
     let last = performance.now()
     const speedMult = levelConfig.speedMult
